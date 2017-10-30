@@ -21,22 +21,21 @@ function checkAndRetrieveProduct(ean) {
 }
 
 function addNewProductToDatabase(item, supplier) {
-   var t =  ProductSupply.create({
+   ProductSupply.create({
         supplierName: supplier,
         price: item.Price,
         Ean: item.Ean,
         inStock: item.InStock
+    }, function(prodsup){
+        Product.create({
+            Ean: item.Ean,
+            name: item.Name,
+            description: item.Description,
+            suppliersThatStock: [prodsup]
+        });
     });
-
-
-    console.log('i should be making a product');
-
-    Product.create({
-        Ean: item.Ean,
-        name: item.Name,
-        description: item.Description,
-        suppliersThatStock: [t]
-    });
+        
+    
 }
 
 function addANewProductSupply(currentProductSupplyList) {
@@ -94,8 +93,8 @@ function updateDbWithAllSupplierStockDetails(){
            makeAnApiRequestToSupplierAndUpdate(supplier[t]);
         
     }
+    console.log('i am finished with the database');
 });
-console.log('i have finished updating the db');
 }
 
 

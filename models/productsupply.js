@@ -10,5 +10,6 @@ const ProductSupplySchema = new Schema({
 
 });
 
+const ProductSupply = mongoose.model('productsupply', ProductSupplySchema);
 
-module.exports =  mongoose.model('productsupply', ProductSupplySchema);
+module.exports =  ProductSupply;
