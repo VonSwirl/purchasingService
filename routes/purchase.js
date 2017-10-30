@@ -1,4 +1,6 @@
 var express = require('express');
+var request = require('request');
+
 var router = express.Router();
 const Supplier = require('../models/suppliers.js');
 
@@ -15,9 +17,15 @@ router.get('/',function(req, res,next){
 
 //I should list all the products from a supplier
 router.get('/:id', function(req,res,next){
-    Supplier.find({ name : req.params.id
+    Supplier.findOne({ name : req.params.id
     }).then(function(supplier){
-        res.send(supplier);
+        request(supplier.api, function(error, response, body){
+            var t = JSON.parse(body);
+            for (var j in t){
+                console.log(j);
+
+            }
+        })
     });
 })
 
