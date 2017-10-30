@@ -1,0 +1,8 @@
+html
+  head
+    title test
+  body
+    each supplier in supplierlist
+        form(action= '/purchasing/' + supplier.name , method="get")
+                p= supplier.name
+                input(type="submit", value="sub")
