@@ -3,6 +3,7 @@ var request = require('request');
 
 var router = express.Router();
 const Supplier = require('../models/suppliers.js');
+const Product = require('../models/product.js');
 
 
 //gets a list of customers by the custid passed in (or id if they themselves are customers)
@@ -20,11 +21,8 @@ router.get('/:id', function(req,res,next){
     Supplier.findOne({ name : req.params.id
     }).then(function(supplier){
         request(supplier.api, function(error, response, body){
-            var t = JSON.parse(body);
-            for (var j in t){
-                console.log(j);
-
-            }
+            var data = JSON.parse(body);
+            Product.updateProductsDatabase(body, "test");
         })
     });
 })
