@@ -1,0 +1,25 @@
+{
+  "name": "purchasing-service",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/chris89culley/purchasingService.git"
+  },
+  "author": "Chris Culley",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/chris89culley/purchasingService/issues"
+  },
+  "homepage": "https://github.com/chris89culley/purchasingService#readme",
+  "dependencies": {
+    "body-parser": "^1.18.2",
+    "express": "^4.16.2",
+    "jade": "^1.11.0",
+    "mongoose": "^4.1.9"
+  }
+}
