@@ -1,0 +1,43 @@
+html
+  head
+    title test
+  body
+
+    h1 ORDER FORM
+    form(action= '/purchasing/chooseSupplier', method="put")
+        table
+            thead
+                tr
+                   th Name
+                   th Brand
+                   th Description
+                   th Number wanted
+                   th Supplier Choice
+            tbody
+
+                each product in productList
+                 -if (product.suppliersThatStock.length > 0)
+                    tr
+                        td= product.name
+                        td= product.brandName
+                        td= product.description
+                        
+                        td
+                           input(type="number", name= product, min= "0")
+
+                        td 
+                                select(id="selsupply", name="supplierChoice")
+                                    option(selected disabled) Select Supplier
+                                    each t in product.suppliersThatStock
+                                      option(value="#{t}")  #{t.supplierName} £#{t.price} 
+                        
+                            
+
+
+                            
+
+
+                        
+                         
+        input(type="submit", value="submit order")
+    

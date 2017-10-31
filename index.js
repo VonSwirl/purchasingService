@@ -20,4 +20,4 @@ app.use('/purchasing', require('./routes/purchase'));
 app.use(function(err, req, res, next){
     res.status(422).send({err: err.message});
 })
-app.listen(process.env.port || 4000);
+app.listen(process.env.port || 3000);
