@@ -6,53 +6,56 @@ var request = require('request');
 const Product = require('../models/product.js');
 const ProductSupply = require('../models/productsupply.js');
 
-function checkAndRetrieveProduct(ean) {
 
-    try {
-        Product.find({Ean : ean}).then(function(product){
-            return product;
-        });
-    } catch (error) {
-        return null;
-        
-    }
-    
-    return null;
-}
 
 function addNewProductToDatabase(item, supplier) {
-   ProductSupply.create({
+
+    console.log('ADDING TO THE DATABASE SOMEHTING');
+
+    var productsupply = new ProductSupply({
         supplierName: supplier,
         price: item.Price,
         Ean: item.Ean,
         inStock: item.InStock
-    }, function(prodsup){
-        Product.create({
-            Ean: item.Ean,
-            name: item.Name,
-            description: item.Description,
-            suppliersThatStock: [prodsup]
-        });
     });
-        
-    
+    productsupply.save();
+
+    var product = new Product({
+        Ean: item.Ean,
+        name : item.Name,
+       suppliersThatStock : [productsupply._id],
+       description : item.Description
+    });
+
+    product.save();
+    console.log('adding new product' + product.name);
 }
 
-function addANewProductSupply(currentProductSupplyList) {
-    currentProductSupplyList.push(ProductSupply.create({
+function addANewProductSupply(currentProductSupplyList, infoOnProductInSupplierBank, supplier) {
+
+    var productsupply = new ProductSupply({
         supplierName: supplier,
         price: infoOnProductInSupplierBank.Price,
-        Ean: currentProduct.Ean,
+        Ean: infoOnProductInSupplierBank.Ean,
         inStock: infoOnProductInSupplierBank.InStock
-    }))
+    });
+    productsupply.save();
+
+    currentProductSupplyList.push(productsupply._id);
+    console.log('i should have added one to the list');
+
+    console.log(currentProductSupplyList);
+
     return currentProductSupplyList;
 
 
 }
 
 function updateProductSupplyList(ean, newProductSupplyList){
-    Product.findOneAndUpdate({ Ean: currentProduct.ean },
+    console.log('i am TRYING  to update the supply list!!!');
+    Product.findOneAndUpdate({ Ean: ean },
         { suppliersThatStock: newProductSupplyList }, function (err, product) {
+            console.log('i am updating product supply list');
             if (err) {
                 console.log('i am an error');
             }
@@ -60,23 +63,25 @@ function updateProductSupplyList(ean, newProductSupplyList){
 }
 
 function findCurrentSupplierDetailsOfProduct(currentProduct, infoOnProductInSupplierBank, supplier) {
-    ProductSupply.find({
+    ProductSupply.findOne({
         supplierName: supplier,
-        Ean: item.Ean
+        Ean: currentProduct.Ean
     }).then(function (supplierlink) {
         var newProductSupplyList;
-        if (supplierlink == null) {
-            updateProductSupplyList(currentProduct.Ean, addANewProductSupply(currentProduct.suppliersThatStock));
+        console.log(supplierlink);
+        if (!supplierlink) {
+            updateProductSupplyList(currentProduct.Ean, addANewProductSupply(currentProduct.suppliersThatStock, infoOnProductInSupplierBank, supplier));
         }
         else{
-            if(supplierlink.price == infoOnProductInSupplierBank.Price && supplierlink.inStock == infoOnProductInSupplierBank.InStock){
-                ProductSupply.findByIdAndUpdate({ean : supplierlink.Ean}, {price : supplierlink.Price,
-                inStock : InStock}, function(err, res){
-                });
-            };
+                if(supplierlink.price != infoOnProductInSupplierBank.Price || supplierlink.inStock != infoOnProductInSupplierBank.InStock){
+                    ProductSupply.findByIdAndUpdate({ean : supplierlink.Ean}, {price : supplierlink.Price,
+                    inStock : InStock}, function(err, res){
+                    });
+            }else{
+                console.log('no changes to be made');
+            }
 
         };
-
     });
 }
 
@@ -97,6 +102,22 @@ function updateDbWithAllSupplierStockDetails(){
 });
 }
 
+function findIfThereIsAlreadyAproductAndRespond(infoOnProductInSupplierBank, supplier){
+    Product.findOne({Ean : infoOnProductInSupplierBank.Ean}).then(function(currentProduct){
+        if (!currentProduct) {
+            addNewProductToDatabase(infoOnProductInSupplierBank, supplier);
+            return;
+        }
+        else {
+            console.log('finding current supplier details');
+            findCurrentSupplierDetailsOfProduct(currentProduct, infoOnProductInSupplierBank, supplier);
+            return;
+            
+        }
+        return;
+    } 
+    );
+    };
 
 function updateProductsDbBySupplier(datain, supplier) {
 
@@ -105,21 +126,14 @@ function updateProductsDbBySupplier(datain, supplier) {
         var data = JSON.parse(datain);
     } catch (error) {
        console.log('error caught here') ;
-       console.log(data);
+       console.log(error);
+       console.log(datain);
        return;
     }
     for (var i = 0; i < Object.keys(data).length; i++) {
-        var infoOnProductInSupplierBank = data[i];
-        console.log(data[i].Ean);
-        var currentProduct = checkAndRetrieveProduct(data[i].Ean);
-        if (currentProduct == null) {
-            addNewProductToDatabase(infoOnProductInSupplierBank, supplier);
-        }
-        else {
-            findCurrentSupplierDetailsOfProduct(currentProduct, infoOnProductInSupplierBank, supplier);
-        }
-
-    }
+        findIfThereIsAlreadyAproductAndRespond(data[i], supplier);
+        
+    };
 
 }
 module.exports = {

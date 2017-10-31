@@ -7,7 +7,7 @@ const ProductSchema = new Schema({
     Ean: String,
     name: String,
     description: String,
-    suppliersThatStock: [ProductSupplySchema]
+    suppliersThatStock: [mongoose.Schema.Types.ObjectId]
 });
 
 const Product = mongoose.model('product', ProductSchema);
