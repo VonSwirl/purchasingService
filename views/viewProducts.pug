@@ -4,7 +4,7 @@ html
   body
 
     h1 ORDER FORM
-    form(action= '/purchasing/chooseSupplier', method="put")
+    form(action= '/purchasing/submitOrder', method="put")
         table
             thead
                 tr
@@ -21,20 +21,21 @@ html
                         td= product.name
                         td= product.brandName
                         td= product.description
+                        input(type="hidden", name= product.Ean, value = product.name)
                         
+
                         td
-                           input(type="number", name= product, min= "0")
+                           input(type="number", name= product.Ean , min= "0")
 
                         td 
-                                select(id="selsupply", name="supplierChoice")
-                                    option(selected disabled) Select Supplier
+                                select(id="selsupply", name= product.Ean)
+                                    option(value = null) Select Supplier
                                     each t in product.suppliersThatStock
-                                      option(value="#{t}")  #{t.supplierName} £#{t.price} 
+                                      option(value= t.supplierName)  #{t.supplierName} £#{t.price} 
                         
                             
 
 
-                            
 
 
                         
