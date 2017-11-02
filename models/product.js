@@ -9,7 +9,9 @@ const ProductSchema = new Schema({
     description: String,
     brandName: String,
     categoryName: String,
-    suppliersThatStock: [{type: mongoose.Schema.Types.ObjectId, ref: 'productsupply'}]
+    suppliersThatStock: [{type: mongoose.Schema.Types.ObjectId, ref: 'productsupply'}],
+    stockNeededForOrders : [{orderNo : String, number : Number}],
+    totalStockNeededForOrders : Number
 });
 
 const Product = mongoose.model('product', ProductSchema);
