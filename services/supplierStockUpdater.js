@@ -109,6 +109,8 @@ function findCurrentSupplierDetailsOfProductAndUpdate(currentProduct, infoOnProd
  */
 function makeAnApiRequestToSupplierAndUpdate(supplier){
     request(supplier.api, function(error, response, body){
+        if(supplier.name == "dodgydealers"){
+        console.log(response.connection["Socket"])};
         updateProductsDbBySupplier(body, supplier.name); 
 
    });

@@ -11,6 +11,7 @@ html
                    th Name
                    th Brand
                    th Description
+                   th No. needed to fulfil orders
                    th Number wanted
                    th Supplier Choice
             tbody
@@ -21,6 +22,7 @@ html
                         td= product.name
                         td= product.brandName
                         td= product.description
+                        td= product.totalStockNeededForOrders
                         input(type="hidden", name= product.Ean, value = product.name)
                         
 
