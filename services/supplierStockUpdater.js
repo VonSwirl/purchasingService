@@ -13,16 +13,13 @@ const ProductSupply = require('../models/productsupply.js');
  */
 function addNewProductToDatabase(item, supplier) {
     //First we create a product supply to add to the product 
-
     var productsupply = new ProductSupply({
         supplierName: supplier,
         price: item.Price,
         Ean: item.Ean,
         inStock: item.InStock
-        
     });
     productsupply.save();
-
     var product = new Product({
         Ean: item.Ean,
         name : item.Name,
@@ -51,8 +48,6 @@ function addANewProductSupply(currentProductSupplyList, infoOnProductInSupplierB
     productsupply.save();
     currentProductSupplyList.push(productsupply._id);
     return currentProductSupplyList;
-
-
 }
 
 /**
@@ -109,8 +104,6 @@ function findCurrentSupplierDetailsOfProductAndUpdate(currentProduct, infoOnProd
  */
 function makeAnApiRequestToSupplierAndUpdate(supplier){
     request(supplier.api, function(error, response, body){
-        if(supplier.name == "dodgydealers"){
-        console.log(response.connection["Socket"])};
         updateProductsDbBySupplier(body, supplier.name); 
 
    });
