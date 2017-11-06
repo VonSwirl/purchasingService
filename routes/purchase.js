@@ -2,7 +2,6 @@ var express = require('express');
 
 
 var router = express.Router();
-const Supplier = require('../models/suppliers.js');
 const StockUpdater = require('../services/supplierStockUpdater.js');
 const request = require('request');
 const orderFulfilUpdater = require('../services/stockRequiredToFulfilOrderUpdater.js');

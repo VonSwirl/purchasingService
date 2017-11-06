@@ -2,8 +2,10 @@ var express = require('express');
 var app = express();
 var bodyparse = require('body-parser');
 var mongoose = require('mongoose');
+var config = require('./config');
 
-mongoose.connect('mongodb://pserv:pserv1@ds241055.mlab.com:41055/purchase-service');
+mongoose.connect(config.testDatabaseURL);
+console.log(config.databaseURL);
 mongoose.Promise = global.Promise;
 
 app.use(express.static('public'));
