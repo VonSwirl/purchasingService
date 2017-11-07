@@ -2,12 +2,16 @@ var Product = require('../models/product.js');
 
 
 /**
- * Updates the product in the product database with the stock purchased that furfils an outstanding order
+ * Updates the product in the product database with the stock purchased that fulfils an outstanding order
  * @param {The ean number of the product} ean 
  * @param {The number purchased} number 
  */
 function updateStockRequiredAfterOrderPlaced(ean, number){
-    Product.findOne({Ean : ean}).then(function(product){
+    return new Promise(function(resolve, reject){
+    Product.findOne({Ean : ean}).then(function(product, err){
+        if(err){
+            resolve(err);
+        }
          var numberOfStock = product.stockNeededForOrders.length;
          for(var t = 0; t < numberOfStock && product.totalStockNeededForOrders > 0; t++){
                   var num = product.stockNeededForOrders[0]["number"];
@@ -19,11 +23,18 @@ function updateStockRequiredAfterOrderPlaced(ean, number){
                     number -= num;
                  }else{
                     product.totalStockNeededForOrders = product.totalStockNeededForOrders - number;
-                     product.stockNeededForOrders[0]["number"] = num - number;
+                     product.stockNeededForOrders[0]["number"] = (product.stockNeededForOrders[0]["number"] - number);
                  };
-                 product.save();
+                 product.save().then(function(){
+                    console.log(product);
+                    resolve(true);
+                 });
+                 
          };
-})}
+
+})});
+
+}
 
 /**
  * This method updates the product database adding to the stockNeededForOrders field the order that 

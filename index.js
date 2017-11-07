@@ -4,8 +4,7 @@ var bodyparse = require('body-parser');
 var mongoose = require('mongoose');
 var config = require('./config');
 
-mongoose.connect(config.testDatabaseURL);
-console.log(config.databaseURL);
+mongoose.connect(config.databaseURL);
 mongoose.Promise = global.Promise;
 
 app.use(express.static('public'));
