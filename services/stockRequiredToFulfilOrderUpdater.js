@@ -10,7 +10,7 @@ function updateStockRequiredAfterOrderPlaced(ean, number){
     return new Promise(function(resolve, reject){
     Product.findOne({Ean : ean}).then(function(product, err){
         if(err){
-            resolve(err);
+            reject(err);
         }
          var numberOfStock = product.stockNeededForOrders.length;
          for(var t = 0; t < numberOfStock && product.totalStockNeededForOrders > 0; t++){
@@ -26,7 +26,6 @@ function updateStockRequiredAfterOrderPlaced(ean, number){
                      product.stockNeededForOrders[0]["number"] = (product.stockNeededForOrders[0]["number"] - number);
                  };
                  product.save().then(function(){
-                    console.log(product);
                     resolve(true);
                  });
                  
