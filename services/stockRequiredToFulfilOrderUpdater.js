@@ -13,7 +13,14 @@ function updateStockRequiredAfterOrderPlaced(ean, number){
             reject(err);
         }
          var numberOfStock = product.stockNeededForOrders.length;
+         var readyToResolve = (numberOfStock === 0) ? true : false;
+         if(readyToResolve){
+             resolve(true);
+         }
          for(var t = 0; t < numberOfStock && product.totalStockNeededForOrders > 0; t++){
+                 if (t == numberOfStock-1){
+                     readyToResolve = true;
+                 }
                   var num = product.stockNeededForOrders[0]["number"];
                   var order = product.stockNeededForOrders[0]["orderNo"];
                   if(number >= num){
@@ -23,10 +30,13 @@ function updateStockRequiredAfterOrderPlaced(ean, number){
                     number -= num;
                  }else{
                     product.totalStockNeededForOrders = product.totalStockNeededForOrders - number;
-                     product.stockNeededForOrders[0]["number"] = (product.stockNeededForOrders[0]["number"] - number);
+                    product.stockNeededForOrders[0]["number"] = (product.stockNeededForOrders[0]["number"] - number);
+                    readyToResolve = true;
                  };
                  product.save().then(function(){
-                    resolve(true);
+                    if(readyToResolve){
+                        resolve(true);
+                    }
                  });
                  
          };
@@ -44,32 +54,42 @@ function updateStockRequiredAfterOrderPlaced(ean, number){
  * @param {the quantity of the item that is needed to fulfil the order} number 
  */
 function addStockRequiredToProduct(order, itemEan, number){
+    return new Promise(function(resolve, reject){
     Product.findOne({"Ean" : itemEan}).then(function (product){
+
     if(!product){
-        console.log('productnotfoundfatalerror');
+        reject('no product found');
       }else{
      var itemjson = {"number" : number, "orderNo" : order };
-     var alreadyCaptured = false;
-     for(var i = 0 ; i < product.stockNeededForOrders.length; i++){
+     var newItem = true;
+     var numberOfCurrentOrdersOutstanding = product.stockNeededForOrders.length;
+     if(numberOfCurrentOrdersOutstanding == 0){
+        product.stockNeededForOrders.push(itemjson);
+        product.totalStockNeededForOrders = number;
+        product.save().then(function(){
+            resolve(true);
+        });
+     }
+     for(var i = 0 ; i < numberOfCurrentOrdersOutstanding; i++){
          if(product.stockNeededForOrders[i]["orderNo"] == order){
-             alreadyCaptured = true;
+             product.stockNeededForOrders[i]["number"] = product.stockNeededForOrders[i]["number"] + number;
          }
-     };
-      if(!alreadyCaptured){
-          product.stockNeededForOrders.push(itemjson);
+         else{
+            product.stockNeededForOrders.push(itemjson);
+         }
       if(product.totalStockNeededForOrders){
           product.totalStockNeededForOrders = product.totalStockNeededForOrders + number;
       }
       else{
           product.totalStockNeededForOrders = number;
       }
-      product.save();
+      product.save().then(function(){
+          resolve(true);
+      });
       };
-  }
-})};
+  }})})};
 
 function letOrderServiceKnowProductHasBeenBrought(orderid, ean){
-    console.log(orderid, ean);
 }
 
 
