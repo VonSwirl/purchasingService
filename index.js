@@ -7,11 +7,10 @@ var config = require('./config');
 mongoose.connect(config.databaseURL);
 mongoose.Promise = global.Promise;
 
-app.use(express.static('public'));
 app.use(bodyparse.json());
 app.use(bodyparse.urlencoded({extended: true}));
 
-
+app.use(express.static('public'));
 app.set('views', './views');
 app.set('view engine', 'pug');
 
