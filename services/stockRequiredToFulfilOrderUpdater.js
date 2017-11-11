@@ -1,5 +1,6 @@
 var Product = require('../models/product.js');
 var config = require('../config');
+var request = require('request');
 
 /**
  * Updates the product in the product database with the stock purchased that fulfils an outstanding order
@@ -92,12 +93,15 @@ function addStockRequiredToProduct(order, itemEan, number){
 
 function letOrderServiceKnowProductHasBeenBrought(orderid, ean){
     //here we are posting to the order service with the details to make the order 
+    try{
     request.post({
-        url : config.orderServiceURL.toUpdateWithPurchase + orderid,
+        url : config.orderServiceURLtoUpdateWithPurchase + orderid,
         body: {'ean' : ean},
         json: true
     });
-    
+}catch(err){
+    console.log('error with letting order service know we have update');
+}
 }
 
 

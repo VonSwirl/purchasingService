@@ -9,7 +9,7 @@ var router = express.Router();
 const StockUpdater = require('../services/supplierStockUpdater.js');
 const request = require('request');
 const orderFulfilUpdater = require('../services/stockRequiredToFulfilOrderUpdater.js');
-const productLister = require('../services/productListService');
+const productSearcher = require('../services/productSearchService.js');
 const purchaseDTO = require('../dto/purchaseOrderProductDTO');
 
 
@@ -17,7 +17,7 @@ const purchaseDTO = require('../dto/purchaseOrderProductDTO');
  * Gets a list of all the product avaliable for purchase with the suppliers that have them in stock
  */
 router.get('/',function(req, res,next){
-    productLister.getAllProductsAvaliableForPurchase().then(function(product){
+    productSearcher.getAllProductsAvaliableForPurchase().then(function(product){
         res.render('viewProducts.pug', {productList : product});
     });
 });
@@ -43,7 +43,7 @@ function updateAdminWithPurchase(item){
 function updateStockWithPurchase(ean, number){
     console.log(ean, number);
 
-    productLister.readyItemForStockUpdate(ean, number).then(function(item){
+    productSearcher.readyItemForStockUpdate(ean, number).then(function(item){
         request.post({
             url : config.stockServiceUpdaterURL,
             body: item.jsonVersion,
