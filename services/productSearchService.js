@@ -1,3 +1,4 @@
+
 var Product = require('../models/product.js');
 var ProductDTO = require('../dto/productDTO.js');
 
@@ -5,8 +6,13 @@ var ProductDTO = require('../dto/productDTO.js');
  * Gets all the products that the suppliers sell ready to be listed
  */
 function getAllProductsAvaliableForPurchase(){
-    var promise =  Product.find({}).populate({path: 'suppliersThatStock', match: {inStock : true}}).lean().exec(); 
-    return promise;
+    return new Promise(function(resolve, reject){
+        var promise =  Product.find({}).populate({path: 'suppliersThatStock', match: {inStock : true}}).lean().exec(); 
+        resolve(promise).catch(function(err){
+          reject('error in finding products');
+        });
+    })
+   
 }
 
 /**
@@ -16,6 +22,9 @@ function getAllProductsAvaliableForPurchase(){
  */
 function readyItemForStockUpdate(ean, number){
     return new Promise(function(resolve, reject){
+        if(isNaN(number) || number <= 0){
+            reject('incorrect incoming');
+        }
     Product.findOne({Ean : ean}).then(function(item){
         var productDTO = new ProductDTO(item, number);
         resolve(productDTO.jsonVersion);

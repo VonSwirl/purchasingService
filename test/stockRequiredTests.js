@@ -41,10 +41,10 @@ var testProduct2 = new Product({name : "testing" + random2, Ean : (random2),
  var testProduct5 = new Product({name: "testing" + random5, Ean : random5, brandName  :"bla", categoryName : "cat",stockNeededForOrders : [{orderNo : "fakeOrder3", number : 11}] }); 
  var testProduct6 = new Product({name: "testing" + random6, Ean : random6, brandName  :"bla", categoryName : "cat",stockNeededForOrders : [{orderNo : "fakeOrder4", number : 11}] }); 
 
-describe('MODULE - StockRequiredToFulfilOrderUpdater ', function(done){
+describe('MODULE - STOCK REQUIRED AFTER ORDER SERVICE', function(done){
 
                             
-describe('Testing UpdateStockRequiredAfterOrder function', function(done){
+describe('Testing update stock required after order function', function(done){
 
     it('Testing removing the less than needed after a purchase', function(done){
             testProduct.save().then(function(product){
@@ -66,7 +66,7 @@ describe('Testing UpdateStockRequiredAfterOrder function', function(done){
             }}).catch(function(err){
                 assert.isNotOk(err, 'promise error');
                 done(); 
-            })});});});
+            })});});
 
     it('Testing removing all the stock needed for an order of a product', function(done){
         testProduct2.save().then(function(product){
@@ -109,7 +109,9 @@ describe('Testing UpdateStockRequiredAfterOrder function', function(done){
                         assert.isNotOk(err, 'promise error');
                         done(); 
                     })});});
-    describe('Testing addStockRequiredToProduct', function(done){
+                });
+
+    describe('Testing add stock required to product function', function(done){
             it('Error returned if no product exists', function(done){
                 addStockRequiredToProduct("bla", "blo", 4).then(function(val, error){
                     expect(error).to.be.equal("no product found");
