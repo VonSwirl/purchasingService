@@ -1,7 +1,9 @@
+
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 const Supplier = require('../models/suppliers.js');
 var request = require('request');
+var http = require('http');
 const Product = require('../models/product.js');
 const ProductSupply = require('../models/productsupply.js');
 
@@ -113,26 +115,47 @@ function findCurrentSupplierDetailsOfProductAndUpdate(currentProduct, infoOnProd
  * @param {The supplier details} supplier 
  */
 function makeAnApiRequestToSupplierAndUpdate(supplier){
-    request(supplier.api, function(error, response, body){
-        updateProductsDbBySupplier(body, supplier.name); 
-
-   });
+    return new Promise(function(resolve, reject){
+        try{
+        http.get(supplier.api, function(res){
+            if(res.statusCode === 400){
+                reject('bad request');
+            }
+            console.log("status code!!! ", res.statusCode);
+          /*   if(error){
+                reject(error);
+            };
+            if(response){
+                console.log("I AM RIGHT HERRRRRRRRRRRRRRRRRRRRRRRRR ");
+                console.log(response);
+            } */
+        module.exports.updateProductsDbBySupplier(res.body, supplier.name); 
+        resolve(true);
+   }).catch(function(err){
+           reject(err)})
+}catch(err){
+       reject(err);
+   }
+    });
 }
+
 
 /**
  * Finds all the suppliers in the database and requests and updated product list
  */
 function updateDbWithAllSupplierStockDetails(){
+    return new Promise(function(resolve, reject){
+
+   
     Supplier.find({}).then(function(supplier){
        for(var t = 0; t < supplier.length; t++){
-           console.log("LSKDJFLKSDJFLSDKJl", supplier[t]);
-           console.log(supplier.length);
            try{
-           makeAnApiRequestToSupplierAndUpdate(supplier[t]);
+           module.exports.makeAnApiRequestToSupplierAndUpdate(supplier[t]);
     }catch(err){
-          console.log('Error with processing supplier');
+          reject(err);
     }}
-});
+    resolve(true);
+}); });
 }
 
 /**
@@ -162,9 +185,7 @@ function findIfThereIsAlreadyAproductAndRespond(infoOnProductInSupplierBank, sup
  */
 function updateProductsDbBySupplier(datain, supplier) {
     try {
-        
         var data = JSON.parse(datain);
-   
     for (var i = 0; i < Object.keys(data).length; i++) {
         findIfThereIsAlreadyAproductAndRespond(data[i], supplier);
     }; } catch (error) {
@@ -176,6 +197,7 @@ function updateProductsDbBySupplier(datain, supplier) {
 module.exports = {
     updateProductsDbBySupplier,
     updateDbWithAllSupplierStockDetails,
-    addNewProductToDatabase
-
+    addNewProductToDatabase,
+    makeAnApiRequestToSupplierAndUpdate,
+    updateProductsDbBySupplier
 }
