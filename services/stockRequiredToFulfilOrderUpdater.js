@@ -38,7 +38,9 @@ function updateStockRequiredAfterOrderPlaced(ean, number){
                     if(readyToResolve){
                         resolve(true);
                     }
-                 });
+                 }).catch(function(err){
+                    reject('error whilst saving');
+                });
                  
          };
 
@@ -93,11 +95,14 @@ function addStockRequiredToProduct(order, itemEan, number){
 
 function letOrderServiceKnowProductHasBeenBrought(orderid, ean){
     //here we are posting to the order service with the details to make the order 
+
     try{
     request.post({
         url : config.orderServiceURLtoUpdateWithPurchase + orderid,
         body: {'ean' : ean},
         json: true
+    }).catch(function(err){
+        console.log('error with letting order service know we have update');
     });
 }catch(err){
     console.log('error with letting order service know we have update');

@@ -12,6 +12,8 @@ const ProductSupply = require('../models/productsupply.js');
  * @param {*The supplier details to be linked to the product} supplier 
  */
 function addNewProductToDatabase(item, supplier) {
+    return new Promise(function(resolve , reject){
+  
     //First we create a product supply to add to the product 
     var productsupply = new ProductSupply({
         supplierName: supplier,
@@ -29,7 +31,15 @@ function addNewProductToDatabase(item, supplier) {
        categoryName : item.CategoryName
     });
 
-    product.save();
+    product.save().then(function(){
+      resolve();
+    }).catch(function(err){
+      reject(err);
+    
+    });
+
+          
+})
 }
 
 /**
@@ -115,8 +125,13 @@ function makeAnApiRequestToSupplierAndUpdate(supplier){
 function updateDbWithAllSupplierStockDetails(){
     Supplier.find({}).then(function(supplier){
        for(var t = 0; t < supplier.length; t++){
+           console.log("LSKDJFLKSDJFLSDKJl", supplier[t]);
+           console.log(supplier.length);
+           try{
            makeAnApiRequestToSupplierAndUpdate(supplier[t]);
-    }
+    }catch(err){
+          console.log('Error with processing supplier');
+    }}
 });
 }
 
@@ -160,5 +175,7 @@ function updateProductsDbBySupplier(datain, supplier) {
 
 module.exports = {
     updateProductsDbBySupplier,
-    updateDbWithAllSupplierStockDetails
+    updateDbWithAllSupplierStockDetails,
+    addNewProductToDatabase
+
 }

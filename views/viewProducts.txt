@@ -1,0 +1,46 @@
+html
+  head
+    title test
+  body
+
+    h1 ORDER FORM
+    form(action= '/purchasing/submitOrder', method="put")
+        table
+            thead
+                tr
+                   th Name
+                   th Brand
+                   th Description
+                   th No. needed to fulfil orders
+                   th Number wanted
+                   th Supplier Choice
+            tbody
+
+                each product in productList
+                 -if (product.suppliersThatStock.length > 0)
+                    tr
+                        td= product.name
+                        td= product.brandName
+                        td= product.description
+                        td= product.totalStockNeededForOrders
+                        input(type="hidden", name= product.Ean, value = product.name)
+                        
+
+                        td
+                           input(type="number", name= product.Ean , min= "0")
+
+                        td 
+                                select(id="selsupply", name= product.Ean)
+                                    option(value = null) Select Supplier
+                                    each t in product.suppliersThatStock
+                                      option(value= t.supplierName)  #{t.supplierName} £#{t.price} 
+                        
+                            
+
+
+
+
+                        
+                         
+        input(type="submit", value="submit order")
+    

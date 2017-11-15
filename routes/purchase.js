@@ -26,6 +26,9 @@ router.post('/test', function(req,res,next){
     console.log(req.body);
 });
 
+router.post('/test/:id', function(req,res,next){
+    console.log(req.body);
+});
 
 function updateAdminWithPurchase(item){
  //here we are posting to the admin service with the details to make the order 
@@ -56,15 +59,17 @@ function updateStockWithPurchase(ean, number){
 /**
  * Once submit order has been pressed, the stock required is updated and the order sent to admin and stock services
  */
-router.get('/submitOrder', function(req,res,next){
-    for (var propName in req.query) {
-        if (req.query.hasOwnProperty(propName)) {
-            if (req.query[propName][1] != '' && parseInt(req.query[propName][1]) > 0 && req.query[propName][2] != 'Select Supplier' ) {
-                var purchaseItem = new purchaseDTO (req.query[propName][0],req.query[propName][1],propName,req.query[propName][2]);
+router.post('/submitOrder', function(req,res,next){
+    console.log(req.body);
+    for (var propName in req.body) {
+        if (req.body.hasOwnProperty(propName)) {
+            if (req.body[propName][1] != '' && parseInt(req.body[propName][1]) > 0 && req.body[propName][2] != 'Select Supplier' ) {
+                var purchaseItem = new purchaseDTO (req.body[propName][0],req.body[propName][1],propName,req.body[propName][2]);
                 orderFulfilUpdater.updateStockRequiredAfterOrderPlaced(purchaseItem.ean, purchaseItem.numberRequired);
                 console.log('her');
+                console.log('I AM WORKING')
                 updateAdminWithPurchase(purchaseItem);
-                updateStockWithPurchase(propName, req.query[propName][1]);
+                updateStockWithPurchase(propName, req.body[propName][1]);
             }
         }
     }
