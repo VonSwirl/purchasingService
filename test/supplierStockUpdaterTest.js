@@ -51,24 +51,42 @@ describe('MODULE - SUPPLIER UPDATE TESTS', function(done){
     it('Testing incorrect url', function(done){
         var spy = sinon.spy(supplierStockUpdater, "updateProductsDbBySupplier");
         supplierStockUpdater.makeAnApiRequestToSupplierAndUpdate({"api": "wrong", "name": "wronger"}).then(function(res){
-        }).catch(function(err){
             expect(spy.callCount).to.be.equal(0);
+            spy.restore();
             done();
+        }).catch(function(err){
+            console.log(err);
         })
     })
 
-    it('Testing a rejected call back from api', function(done){
-        nock('http://www.testing.com').get('/').reply(200, 'something strange');
+    it('Testing a good call back from api', function(done){
+        nock('http://www.testing.com').get('/').reply(200, 'good call');
+        var fake = function(){return true};
+        var stub = sinon.stub(supplierStockUpdater, "updateProductsDbBySupplier").callsFake(fake);
         supplierStockUpdater.makeAnApiRequestToSupplierAndUpdate({"api" : "http://www.testing.com", "name": "bla" }).then(function(res){
-            console.log(res, "actually in here");
-
+            expect(stub.callCount).to.be.equal(1);
+            stub.restore();
             done();
         }).catch(function(err){
             console.log(err, " this is an error");
-            done();
         })
 
     })
+
+
+    it('Testing a bad call back from api', function(done){
+        nock('http://www.testing1.com').get('/').reply(500, 'bad call');
+        var fake = function(){return true};
+        var stub = sinon.stub(supplierStockUpdater, "updateProductsDbBySupplier").callsFake(fake);
+        supplierStockUpdater.makeAnApiRequestToSupplierAndUpdate({"api" : "http://www.testing1.com", "name": "bla" }).then(function(res){
+            expect(stub.callCount).to.be.equal(0);
+            done();
+        }).catch(function(err){
+            console.log(err, " this is an error");
+        })
+
+    })
+
  }) 
 
   describe('Tesing adding a new product to a database', function(done){

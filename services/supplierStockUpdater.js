@@ -118,21 +118,11 @@ function makeAnApiRequestToSupplierAndUpdate(supplier){
     return new Promise(function(resolve, reject){
         try{
         http.get(supplier.api, function(res){
-            if(res.statusCode === 400){
-                reject('bad request');
+            if(res.statusCode < 300){
+                module.exports.updateProductsDbBySupplier(res.body, supplier.name); 
             }
-            console.log("status code!!! ", res.statusCode);
-          /*   if(error){
-                reject(error);
-            };
-            if(response){
-                console.log("I AM RIGHT HERRRRRRRRRRRRRRRRRRRRRRRRR ");
-                console.log(response);
-            } */
-        module.exports.updateProductsDbBySupplier(res.body, supplier.name); 
-        resolve(true);
-   }).catch(function(err){
-           reject(err)})
+            resolve(true);
+   })
 }catch(err){
        reject(err);
    }
