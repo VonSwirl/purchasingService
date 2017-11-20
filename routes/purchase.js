@@ -66,8 +66,6 @@ router.post('/submitOrder', function(req,res,next){
             if (req.body[propName][1] != '' && parseInt(req.body[propName][1]) > 0 && req.body[propName][2] != 'Select Supplier' ) {
                 var purchaseItem = new purchaseDTO (req.body[propName][0],req.body[propName][1],propName,req.body[propName][2]);
                 orderFulfilUpdater.updateStockRequiredAfterOrderPlaced(purchaseItem.ean, purchaseItem.numberRequired);
-                console.log('her');
-                console.log('I AM WORKING')
                 updateAdminWithPurchase(purchaseItem);
                 updateStockWithPurchase(propName, req.body[propName][1]);
             }

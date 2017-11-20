@@ -5,4 +5,5 @@ config.orderServiceURLtoUpdateWithPurchase = "http://localhost:3001/purchasing/t
 config.testDatabaseURL = "mongodb://localhost:27017/MyDb";
 config.AdminServicePurchaseURL = "http://localhost:3001/purchasing/test";
 config.stockServiceUpdaterURL= "http://localhost:3001/purchasing/test";
+config.bazzar = "http://bazzasbazaar.azurewebsites.net/Store.svc?wsdl";
 module.exports = config;

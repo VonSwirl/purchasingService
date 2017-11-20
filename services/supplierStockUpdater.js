@@ -1,4 +1,3 @@
-
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 const Supplier = require('../models/suppliers.js');
@@ -6,6 +5,7 @@ var request = require('request');
 var http = require('http');
 const Product = require('../models/product.js');
 const ProductSupply = require('../models/productsupply.js');
+const bazzarWCF = require('./bazzasbazaarUpdateService');
 
 
 /**
@@ -117,17 +117,27 @@ function findCurrentSupplierDetailsOfProductAndUpdate(currentProduct, infoOnProd
 function makeAnApiRequestToSupplierAndUpdate(supplier){
     return new Promise(function(resolve, reject){
         try{
-        http.get(supplier.api, function(res){
-            if(res.statusCode < 300){
-                module.exports.updateProductsDbBySupplier(res.body, supplier.name); 
-            }
+            if(supplier.type === "api"){
+                request(supplier.api,function(err, res, body){
+                    module.exports.updateProductsDbBySupplier(body, supplier.name); 
+                });
+           }else{
+               updateWCF(supplier);
+           }
             resolve(true);
-   })
 }catch(err){
        reject(err);
    }
     });
 }
+
+function updateWCF(supplier){
+    bazzarWCF.connectAndPullProducts().then(function(res,err){
+        for (var i = 0; i < Object.keys(res).length; i++) {
+            res[i]["Price"] = res[i]["PriceForOne"];
+            findIfThereIsAlreadyAproductAndRespond(res[i], supplier.name);
+        }; 
+})}
 
 
 /**
@@ -135,12 +145,12 @@ function makeAnApiRequestToSupplierAndUpdate(supplier){
  */
 function updateDbWithAllSupplierStockDetails(){
     return new Promise(function(resolve, reject){
-
-   
+    
     Supplier.find({}).then(function(supplier){
        for(var t = 0; t < supplier.length; t++){
            try{
-           module.exports.makeAnApiRequestToSupplierAndUpdate(supplier[t]);
+               makeAnApiRequestToSupplierAndUpdate(supplier[t]);
+          
     }catch(err){
           reject(err);
     }}
@@ -175,10 +185,14 @@ function findIfThereIsAlreadyAproductAndRespond(infoOnProductInSupplierBank, sup
  */
 function updateProductsDbBySupplier(datain, supplier) {
     try {
-        var data = JSON.parse(datain);
-    for (var i = 0; i < Object.keys(data).length; i++) {
-        findIfThereIsAlreadyAproductAndRespond(data[i], supplier);
-    }; } catch (error) {
+        if(datain != null){
+            console.log('new datat');
+            var data = JSON.parse(datain);
+            for (var i = 0; i < Object.keys(data).length; i++) {
+                findIfThereIsAlreadyAproductAndRespond(data[i], supplier);
+            }; 
+        }
+   } catch (error) {
         console.log(error);
 }}
 
