@@ -3,6 +3,8 @@ var app = express();
 var bodyparse = require('body-parser');
 var mongoose = require('mongoose');
 var config = require('./config');
+var schedule = require('node-schedule');
+var stockUpdate = require('./services/supplierStockUpdater.js');
 
 mongoose.connect(config.databaseURL);
 mongoose.Promise = global.Promise;
@@ -16,6 +18,16 @@ app.set('view engine', 'pug');
 
 
 app.use('/purchasing', require('./routes/purchase'));
+
+var rule = new schedule.RecurrenceRule();
+rule.hour = 16;
+rule.minute = 40;
+
+var j = schedule.scheduleJob(rule, function(){
+    console.log('in here');
+    stockUpdate.updateDbWithAllSupplierStockDetails();
+})
+
 
 app.use(function(err, req, res, next){
     res.status(422).send({err: err.message});

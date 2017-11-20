@@ -5,8 +5,8 @@ var request = require('request');
 var http = require('http');
 const Product = require('../models/product.js');
 const ProductSupply = require('../models/productsupply.js');
-const bazzarWCF = require('./bazzasbazaarUpdateService');
-
+var soap = require('strong-soap').soap;
+var config = require('../config');
 
 /**
  * This adds the product to the database along with linked product-supplier details
@@ -82,10 +82,10 @@ function updateProductSupplyList(ean, newProductSupplyList){
  * @param {The database supplierLink for the product} supplierLink 
  * @param {The supplier side information on the product} infoOnProductInSupplierBank 
  */
-function updatePriceAndStockLevelOfProductIfNeeded(supplierLink, infoOnProductInSupplierBank){
+function updatePriceAndStockLevelOfProductIfNeeded(supplierlink, infoOnProductInSupplierBank){
     if(supplierlink.price != infoOnProductInSupplierBank.Price || supplierlink.inStock != infoOnProductInSupplierBank.InStock){
         ProductSupply.findByIdAndUpdate({ean : supplierlink.Ean}, {price : supplierlink.Price,
-        inStock : InStock}, function(err, res){
+        inStock : infoOnProductInSupplierBank.InStock}, function(err, res){
         });
 }
 }
@@ -131,8 +131,27 @@ function makeAnApiRequestToSupplierAndUpdate(supplier){
     });
 }
 
+
+
+function connectAndPullProducts(url){
+    return new Promise(function(resolve, reject){
+    soap.createClient(url, function(err, client){
+        var method = client['Store']["BasicHttpBinding_IStore"]["GetFilteredProducts"];
+        method(function(err,res,env,soaphead){
+            resolve(res.GetFilteredProductsResult.Product);
+        })
+    })
+   
+});}
+
+
+
+/**
+ * Currently updates the WCF Service 
+ * @param {The supplier details} supplier 
+ */
 function updateWCF(supplier){
-    bazzarWCF.connectAndPullProducts().then(function(res,err){
+    connectAndPullProducts(supplier.api).then(function(res,err){
         for (var i = 0; i < Object.keys(res).length; i++) {
             res[i]["Price"] = res[i]["PriceForOne"];
             findIfThereIsAlreadyAproductAndRespond(res[i], supplier.name);
