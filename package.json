@@ -4,7 +4,8 @@
   "description": "",
   "main": "PurchasingServiceController.js",
   "scripts": {
-    "test": "mocha || true"
+    "test": "mocha || true",
+    "start" : "node index.js"
   },
   "repository": {
     "type": "git",
