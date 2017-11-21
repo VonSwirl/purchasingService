@@ -19,6 +19,17 @@ app.set('view engine', 'pug');
 
 app.use('/purchasing', require('./routes/purchase'));
 
+
+
+/**
+ * Gets a list of all the product avaliable for purchase with the suppliers that have them in stock
+ */
+router.get('/',function(req, res,next){
+    res.send('I am a test');
+});
+
+
+
 var rule = new schedule.RecurrenceRule();
 rule.hour = 16;
 rule.minute = 40;
