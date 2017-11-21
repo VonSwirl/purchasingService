@@ -17,3 +17,9 @@ body {
 .bg-dark-blue {
     background-color: #193441;
 }
+table{
+    border-collapse: collapse;
+}
+.firstLine td{
+    border-bottom: 2px solid black;
+}

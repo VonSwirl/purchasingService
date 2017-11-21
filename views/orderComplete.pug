@@ -6,5 +6,13 @@ html(lang="en")
     title Order Complete
   body
     h1 ORDER COMPLETE
+
     each item in items
         p= item[1] + " " + item[0] + "'s from " + item[2]
+    button(onclick = "goBack()") goBack
+
+
+    script.
+      var goBack = function(){
+        window.location.href = '/purchasing'
+      }
