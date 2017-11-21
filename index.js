@@ -43,4 +43,4 @@ var j = schedule.scheduleJob(rule, function(){
 app.use(function(err, req, res, next){
     res.status(422).send({err: err.message});
 })
-app.listen(process.env.port || 3001);
+app.listen(process.env.PORT || 3001);
