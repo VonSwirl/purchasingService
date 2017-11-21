@@ -205,7 +205,6 @@ function findIfThereIsAlreadyAproductAndRespond(infoOnProductInSupplierBank, sup
 function updateProductsDbBySupplier(datain, supplier) {
     try {
         if(datain != null){
-            console.log('new datat');
             var data = JSON.parse(datain);
             for (var i = 0; i < Object.keys(data).length; i++) {
                 findIfThereIsAlreadyAproductAndRespond(data[i], supplier);
