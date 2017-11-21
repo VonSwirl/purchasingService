@@ -25,7 +25,7 @@ app.use('/purchasing', require('./routes/purchase'));
  * Gets a list of all the product avaliable for purchase with the suppliers that have them in stock
  */
 app.get('/',function(req, res,next){
-    res.render('index.pug');
+    res.redirect('/purchasing');
 });
 
 
