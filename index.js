@@ -24,7 +24,7 @@ app.use('/purchasing', require('./routes/purchase'));
 /**
  * Gets a list of all the product avaliable for purchase with the suppliers that have them in stock
  */
-router.get('/',function(req, res,next){
+app.get('/',function(req, res,next){
     res.send('I am a test');
 });
 
