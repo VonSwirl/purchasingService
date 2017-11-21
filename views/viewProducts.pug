@@ -36,7 +36,7 @@ html(lang="en")
                                 select(id="selsupply", name= product.Ean)
                                     option(value = null) Select Supplier
                                     each t in product.suppliersThatStock
-                                      option(value= t.supplierName)  #{t.supplierName} £#{t.price} 
+                                      option(value= {'name' : t.supplierName, 'price' : t.price})  #{t.supplierName} £#{t.price} 
                         
                             
 

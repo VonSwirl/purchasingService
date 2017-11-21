@@ -10,7 +10,7 @@ const StockUpdater = require('../services/supplierStockUpdater.js');
 const request = require('request');
 const orderFulfilUpdater = require('../services/stockRequiredToFulfilOrderUpdater.js');
 const productSearcher = require('../services/productSearchService.js');
-const purchaseDTO = require('../dto/purchaseOrderProductDTO');
+const purchaseDTO = require('../dto/purchaseOrderDTO');
 
 
 /**
@@ -22,16 +22,22 @@ router.get('/',function(req, res,next){
     });
 });
 
-function updateAdminWithPurchase(item){
+function updateAdminWithPurchase(supplierItemPurchases){
+    for(var key in supplierItemPurchases){
+        if(supplierItemPurchases.hasOwnProperty(key)){
+            try{
+                request.post({
+                   url : config.AdminServicePurchaseURL,
+                   body: supplierItemPurchases[key].jsonVersionForPayment,
+                   json: true
+               });} catch(err){
+                   console.log('error with admin service link');
+               }
+
+        }
+    }
  //here we are posting to the admin service with the details to make the order 
- try{
- request.post({
-    url : config.AdminServicePurchaseURL,
-    body: item.jsonVersion,
-    json: true
-});} catch(err){
-    console.log('error with admin service link');
-}
+
 }
 
 
@@ -50,18 +56,26 @@ function updateStockWithPurchase(ean, number){
  * Once submit order has been pressed, the stock required is updated and the order sent to admin and stock services
  */
 router.post('/submitOrder', function(req,res,next){
+    var supplierOrderMap = new Object();
     for (var propName in req.body) {
         if (req.body.hasOwnProperty(propName)) {
             if (req.body[propName][1] != '' && parseInt(req.body[propName][1]) > 0 && req.body[propName][2] != 'Select Supplier' ) {
-                var purchaseItem = new purchaseDTO (req.body[propName][0],req.body[propName][1],propName,req.body[propName][2]);
-                orderFulfilUpdater.updateStockRequiredAfterOrderPlaced(purchaseItem.ean, purchaseItem.numberRequired);
-                updateAdminWithPurchase(purchaseItem);
+                var supPrice = JSON.parse(req.body[propName][2]);
+                var supplierName = supPrice.name;
+                if(!supplierOrderMap[supplierName]){
+                    supplierOrderMap[supplierName] = new purchaseDTO(supplierName, propName, req.body[propName][1], supPrice.price);
+                }
+                else{
+                    supplierOrderMap[supplierName].addItems(propName, req.body[propName][1], supPrice.price);
+                }
+                orderFulfilUpdater.updateStockRequiredAfterOrderPlaced(propName, req.body[propName][1]);
                 updateStockWithPurchase(propName, req.body[propName][1]);
             }else{
                 delete req.body[propName];
             }
         }
     }
+    updateAdminWithPurchase(supplierOrderMap);
     res.render('orderComplete.pug', {'items' : req.body});
 });
 
