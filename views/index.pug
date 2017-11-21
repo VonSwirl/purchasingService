@@ -1,0 +1,17 @@
+doctype html
+html(lang="en")
+  link(rel='stylesheet', href='/src/main/bootstrap/bootstrap.min.css', type='text/css')
+  head
+    include staff.html
+    title Order Complete
+  body
+    h1 ORDER COMPLETE
+
+    h testing
+    button(onclick = "goBack()") goBack
+
+
+    script.
+      var goBack = function(){
+        window.location.href = '/purchasing'
+      }
