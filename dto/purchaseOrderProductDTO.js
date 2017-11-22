@@ -2,20 +2,19 @@
 /**
  * A DTO to be passed to the admin service to make an order
  */
-class purchaseOrderProductDTO{
+class purchaseOrderDTO{
 
-    constructor (supplierName, ean, noRequired, price){
+    constructor (supplierName, ean, noRequired, cost){
             this._items = [];
             this._supplierName = supplierName;
             this._items.push({'ean' : ean, 'number' : noRequired});
-            this._total = parseInt(noRequired) * parseFloat(price);
-            console.log(this._total, 'i am the total');
+            this._total = cost;
     }
 
 
-    addItems(ean, number, price) {
+    addItems(ean, number, cost) {
          this._items.push({'ean' : ean, 'number' : number});
-         this._total += parseInt(number) * parseFloat(price);
+         this._total += cost;
     }
 
     get jsonVersionForPayment(){
@@ -31,4 +30,4 @@ class purchaseOrderProductDTO{
     }
 
 
-module.exports = purchaseOrderProductDTO;
+module.exports = purchaseOrderDTO;
