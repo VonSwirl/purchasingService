@@ -32,6 +32,20 @@ body {
     
 }
 
+.title{
+    margin-left: 150px;
+    margin-top: 20px;
+}
+
+.filterbox{
+    margin-top: 50px;
+    margin-bottom: 50px;
+    margin: 20px;
+    width: 200px;
+    display: inline;
+    text-align: center;
+}
+
 .arrow-down {
     width: 0; 
     height: 0; 
