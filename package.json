@@ -1,0 +1,37 @@
+{
+  "name": "purchasing-service",
+  "version": "1.0.0",
+  "description": "",
+  "main": "PurchasingServiceController.js",
+  "scripts": {
+    "test": "mocha || true",
+    "start" : "node index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/chris89culley/purchasingService.git"
+  },
+  "author": "Chris Culley",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/chris89culley/purchasingService/issues"
+  },
+  "homepage": "https://github.com/chris89culley/purchasingService#readme",
+  "dependencies": {
+    "body-parser": "^1.18.2",
+    "chai": "^4.1.2",
+    "express": "^4.16.2",
+    "factory-girl": "^5.0.1",
+    "jade": "^1.11.0",
+    "mongoose": "^4.1.9",
+    "nock": "^9.1.0",
+    "node-schedule": "^1.2.5",
+    "pug": "^2.0.0-rc.4",
+    "rewire": "^3.0.0",
+    "should": "^13.1.3",
+    "sinon": "^4.1.2",
+    "sinon-mongoose": "^2.0.2",
+    "soap": "^0.23.0",
+    "strong-soap": "^1.2.6"
+  }
+}
