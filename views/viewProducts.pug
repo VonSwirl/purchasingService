@@ -15,10 +15,10 @@ html(lang="en")
                 tr.tr
                    th.clickable(onclick="sortTable(0)") Name 
                    th.clickable(onclick="sortTable(1)") Brand
-                   th.clickable(onclick="sortTable(3)") Description
-                   th.clickable(onclick="sortTable(4)") No. needed to fulfil orders
-                   th.clickable(onclick="sortTable(5)") Number wanted
-                   th.clickable(onclick="sortTable(6)") Supplier Choice
+                   th.clickable(onclick="sortTable(2)") Description
+                   th.clickable(onclick="sortTable(3)") No. needed to fulfil orders
+                   th.clickable(onclick="sortTable(4)") Number wanted
+                   th.clickable(onclick="sortTable(5)") Supplier Choice
             tbody
                 each product in productList
                  if product.suppliersThatStock.length > 0
