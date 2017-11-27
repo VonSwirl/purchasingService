@@ -9,6 +9,9 @@ html(lang="en")
     input(type="text", id="filterByName", onkeyup="filter(0)", placeholder= "Filter products by name", class= "filterbox")
     p.filterbox OR
     input(type="text", id="filterByBrand", onkeyup="filter(1)", placeholder= "Filter products by brand", class="filterbox")
+    div.filterForProducts 
+        p Show only products needed for orders
+        input(type="checkbox", id="onlyNeeded", onchange="showOnlyNeeded()")
     form(action= '/purchasing/submitOrder', method="post")
         table(class= "table", id = "myTable")
             thead
@@ -22,9 +25,6 @@ html(lang="en")
             tbody
                 each product in productList
                  if product.suppliersThatStock.length > 0
-                    if product.totalStockNeededForOrders > 0
-                        tr(class= "required")
-                    else
                         tr(class= table)
                             td= product.name
                             td= product.brandName
@@ -103,4 +103,24 @@ script.
                     }
                 }
             }
+script.
+    function showOnlyNeeded(){
+           var input = false;
+            if (document.getElementById("onlyNeeded").checked){
+                input = true;
+            }
+            console.log(input);
+            table = document.getElementById("myTable");
+            tr = table.getElementsByTagName("tr");
+            for (i = 0; i < tr.length; i++) {
+                td = tr[i].getElementsByTagName("td")[3];
+                if (td) {
+                    if(td.innerHTML > 0 || !input)
+                   {
+                        tr[i].style.display = "";
+                        } else { tr[i].style.display = "none"; }
+                    }
+                }
+            }
+
     

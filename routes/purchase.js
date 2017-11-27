@@ -44,7 +44,9 @@ router.get('/updateSupplierStockDetails', function(req,res,next){
  * This method responds a request from the order service when certain items are required to fulfil an order
  */
 router.post('/stockRequired', function(req,res,next){
+    console.log(req.body);
     var items = req.body["itemsRequired"];
+    console.log('posting', items);
     for(var item in items){
         orderFulfilUpdater.addStockRequiredToProduct(req.body["orderid"], items[item]["ean"], items[item]["number"]);
     }
