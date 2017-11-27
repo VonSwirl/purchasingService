@@ -1,55 +1,116 @@
 doctype html
 html(lang="en")
   link(rel='stylesheet', href='/src/main/bootstrap/bootstrap.min.css', type='text/css')
+ 
   head
     include staff.html
     title test
+
+
+    script.
+      function test(){
+        console.log('tesing123')
+      }
+        
+  
   body
 
-    h1 ORDER FORM
-    form(action= '/purchasing/submitOrder', method="post")
-        table
-            thead
-                tr
-                   th Name
-                   th Brand
-                   th Description
-                   th No. needed to fulfil orders
-                   th Number wanted
-                   th Supplier Choice
-                   th test
-            tbody
 
+    h1 ORDER FORM
+    input(type="text", id="filterByName", onkeyup="filter(0)", placeholder= "Filter products by name")
+    input(type="text", id="filterByBrand", onkeyup="filter(1)", placeholder= "Filter products by brand")
+    form(action= '/purchasing/submitOrder', method="post")
+        table(class= "table", id = "myTable")
+            thead
+                tr.tr
+                   th.clickable(onclick="sortTable(0)") Name 
+                   th.clickable(onclick="sortTable(1)") Brand
+                   th.clickable(onclick="sortTable(3)") Description
+                   th.clickable(onclick="sortTable(4)") No. needed to fulfil orders
+                   th.clickable(onclick="sortTable(5)") Number wanted
+                   th.clickable(onclick="sortTable(6)") Supplier Choice
+            tbody
                 each product in productList
-                 -if (product.suppliersThatStock.length > 0)
-                    tr
-                        td= product.name
-                        td= product.brandName
-                        td= product.description
-                        td= product.totalStockNeededForOrders
-                        input(type="hidden", name= product.Ean, value = product.name)
+                 if product.suppliersThatStock.length > 0
+                    if product.totalStockNeededForOrders > 0
+                        tr(class= "required")
+                    else
+                        tr(class= table)
+                            td= product.name
+                            td= product.brandName
+                            td= product.description
+                            td= product.totalStockNeededForOrders
+                            input(type="hidden", name= product.Ean, value = product.name)
                         
 
-                        td
-                           input(type="number", name= product.Ean , min= "0")
+                            td
+                                input(type="number", name= product.Ean , min= "0")
 
-                        td 
+                            td 
                                 select(id="selsupply", name= product.Ean)
                                     option(value = null) Select Supplier
                                     each t in product.suppliersThatStock
                                       option(value= {'name' : t.supplierName, 'price' : t.price})  #{t.supplierName} £#{t.price} 
-                        
-                            
-
-
-
-
-                        
                          
         input(type="submit", value="submit order")
 
-
-        script.
-            var myToken = localStorage.getItem("token");
-            console.log(myToken);
-    
+script.
+  function sortTable(n) {
+    var table, rows, switching, i, x, y, shouldSwitch, dir, switchcount = 0;
+    table = document.getElementById("myTable");
+    switching = true;
+    dir = "asc";
+    while (switching) {
+     switching = false;
+     rows = table.getElementsByTagName("TR");
+     for (i = 1; i < (rows.length - 1); i++) {
+       shouldSwitch = false;
+       x = rows[i].getElementsByTagName("TD")[n];
+       y = rows[i + 1].getElementsByTagName("TD")[n];
+       if (dir == "asc") {
+         if (x.innerHTML.toLowerCase() > y.innerHTML.toLowerCase()) {
+           shouldSwitch= true;
+           break;
+            }
+         } else if (dir == "desc") {
+         if (x.innerHTML.toLowerCase() < y.innerHTML.toLowerCase()) {
+           shouldSwitch= true;
+           break;
+         }
+             }
+        }
+        if (shouldSwitch) {
+           rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
+           switching = true;
+           switchcount ++;
+        } else {
+        if (switchcount == 0 && dir == "asc") {
+          dir = "desc";
+          switching = true;
+         }
+        }
+        }
+    }
+       
+script.
+        function filter(n) {
+            var input, filter, table, tr, td, i;
+            console.log(n);
+            switch (n){
+                case 0:
+                    input = document.getElementById("filterByName");
+                    break;
+                case 1:
+                    input = document.getElementById("filterByBrand");}
+            filter = input.value.toUpperCase();
+            table = document.getElementById("myTable");
+            tr = table.getElementsByTagName("tr");
+            for (i = 0; i < tr.length; i++) {
+                td = tr[i].getElementsByTagName("td")[n];
+                if (td) {
+                    if (td.innerHTML.toUpperCase().indexOf(filter) > -1) {
+                        tr[i].style.display = "";
+                        } else { tr[i].style.display = "none"; }
+                    }
+                }
+            }

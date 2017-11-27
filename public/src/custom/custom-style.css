@@ -17,9 +17,25 @@ body {
 .bg-dark-blue {
     background-color: #193441;
 }
-table{
+.table{
     border-collapse: collapse;
+    
 }
-.firstLine td{
-    border-bottom: 2px solid black;
+.required{
+    background-color: red;
 }
+
+.clickable {
+    border-width: 0 3px 3px 0;
+    padding: 3px;
+    text-align: center;
+    
+}
+
+.arrow-down {
+    width: 0; 
+    height: 0; 
+    border-left: 20px solid transparent;
+    border-right: 20px solid transparent;
+    border-top: 20px solid #f00;
+  }
