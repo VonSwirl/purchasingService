@@ -17,6 +17,7 @@ body {
 .bg-dark-blue {
     background-color: #193441;
 }
+<<<<<<< HEAD
 .table{
     border-collapse: collapse;
     
@@ -53,3 +54,11 @@ body {
     border-right: 20px solid transparent;
     border-top: 20px solid #f00;
   }
+=======
+table{
+    border-collapse: collapse;
+}
+.firstLine td{
+    border-bottom: 2px solid black;
+}
+>>>>>>> a42a3551371004f902e01cf2971c9bffbdb0bba8

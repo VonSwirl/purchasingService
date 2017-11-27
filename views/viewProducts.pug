@@ -1,12 +1,16 @@
 doctype html
 html(lang="en")
   link(rel='stylesheet', href='/src/main/bootstrap/bootstrap.min.css', type='text/css')
+<<<<<<< HEAD
  
+=======
+>>>>>>> a42a3551371004f902e01cf2971c9bffbdb0bba8
   head
     include staff.html
     title test
   body
 
+<<<<<<< HEAD
     h1.title ORDER FORM
     input(type="text", id="filterByName", onkeyup="filter(0)", placeholder= "Filter products by name", class= "filterbox")
     p.filterbox OR
@@ -39,14 +43,55 @@ html(lang="en")
                                 input(type="number", name= product.Ean , min= "0")
 
                             td 
+=======
+    h1 ORDER FORM
+    form(action= '/purchasing/submitOrder', method="post")
+        table
+            thead
+                tr
+                   th Name
+                   th Brand
+                   th Description
+                   th No. needed to fulfil orders
+                   th Number wanted
+                   th Supplier Choice
+                   th test
+            tbody
+
+                each product in productList
+                 -if (product.suppliersThatStock.length > 0)
+                    tr
+                        td= product.name
+                        td= product.brandName
+                        td= product.description
+                        td= product.totalStockNeededForOrders
+                        input(type="hidden", name= product.Ean, value = product.name)
+                        
+
+                        td
+                           input(type="number", name= product.Ean , min= "0")
+
+                        td 
+>>>>>>> a42a3551371004f902e01cf2971c9bffbdb0bba8
                                 select(id="selsupply", name= product.Ean)
                                     option(value = null) Select Supplier
                                     each t in product.suppliersThatStock
                                       option(value= {'name' : t.supplierName, 'price' : t.price})  #{t.supplierName} £#{t.price} 
+<<<<<<< HEAD
+=======
+                        
+                            
+
+
+
+
+                        
+>>>>>>> a42a3551371004f902e01cf2971c9bffbdb0bba8
                          
         input(type="submit", value="submit order")
 
 
+<<<<<<< HEAD
 //Taken and amended from source -> https://www.w3schools.com
 script.
   function sortTable(n) {
@@ -108,3 +153,9 @@ script.
                     }
                 }
             }
+=======
+        script.
+            var myToken = localStorage.getItem("token");
+            console.log(myToken);
+    
+>>>>>>> a42a3551371004f902e01cf2971c9bffbdb0bba8
