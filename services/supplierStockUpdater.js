@@ -119,12 +119,19 @@ function makeAnApiRequestToSupplierAndUpdate(supplier){
         try{
             if(supplier.type === "api"){
                 request(supplier.api,function(err, res, body){
-                    module.exports.updateProductsDbBySupplier(body, supplier.name); 
+                    if(!err){
+                        module.exports.updateProductsDbBySupplier(body, supplier.name); 
+                        resolve(true);
+                    }else{
+                        resolve('Error with URL');
+                    }
+                    
                 });
            }else{
                updateWCF(supplier);
+               resolve(true);
            }
-            resolve(true);
+            
 }catch(err){
        reject(err);
    }
@@ -168,7 +175,7 @@ function updateDbWithAllSupplierStockDetails(){
     Supplier.find({}).then(function(supplier){
        for(var t = 0; t < supplier.length; t++){
            try{
-               makeAnApiRequestToSupplierAndUpdate(supplier[t]);
+               module.exports.makeAnApiRequestToSupplierAndUpdate(supplier[t]);
           
     }catch(err){
           reject(err);

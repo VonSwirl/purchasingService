@@ -50,12 +50,14 @@ describe('MODULE - SUPPLIER UPDATE TESTS', function(done){
  describe('Testing making an api request to supplier', function(done){
     it('Testing incorrect url', function(done){
         var spy = sinon.spy(supplierStockUpdater, "updateProductsDbBySupplier");
-        supplierStockUpdater.makeAnApiRequestToSupplierAndUpdate({"api": "wrong", "name": "wronger"}).then(function(res){
+        supplierStockUpdater.makeAnApiRequestToSupplierAndUpdate({"api": "wrong", "name": "wronger", "type" : "api"}).then(function(res){
+            console.log('coming in here as EXPECTED')
             expect(spy.callCount).to.be.equal(0);
             spy.restore();
             done();
+           
         }).catch(function(err){
-            console.log(err);
+            console.log('made it here???', res)
         })
     })
 
@@ -63,8 +65,10 @@ describe('MODULE - SUPPLIER UPDATE TESTS', function(done){
         nock('http://www.testing.com').get('/').reply(200, 'good call');
         var fake = function(){return true};
         var stub = sinon.stub(supplierStockUpdater, "updateProductsDbBySupplier").callsFake(fake);
-        supplierStockUpdater.makeAnApiRequestToSupplierAndUpdate({"api" : "http://www.testing.com", "name": "bla" }).then(function(res){
-            expect(stub.callCount).to.be.equal(1);
+        var promise = supplierStockUpdater.makeAnApiRequestToSupplierAndUpdate({"api" : "http://www.testing.com", "name": "bla" , "type" : "api"})
+        promise.then(function(res){
+           console.log('i made it IN') 
+           expect(stub.callCount).to.be.equal(1);
             stub.restore();
             done();
         }).catch(function(err){
