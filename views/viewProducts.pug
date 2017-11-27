@@ -17,6 +17,7 @@ html(lang="en")
                    th No. needed to fulfil orders
                    th Number wanted
                    th Supplier Choice
+                   th test
             tbody
 
                 each product in productList
@@ -46,4 +47,9 @@ html(lang="en")
                         
                          
         input(type="submit", value="submit order")
+
+
+        script.
+            var myToken = localStorage.getItem("token");
+            console.log(myToken);
     
