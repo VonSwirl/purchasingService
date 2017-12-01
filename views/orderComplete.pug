@@ -8,7 +8,8 @@ html(lang="en")
     h1 ORDER COMPLETE
 
     each item in items
-        p= item[1] + " " + item[0] + "'s from " + item[2]
+        -var itemPrice = JSON.parse(item[2])
+        p= item[1] + " ->  " + item[0] + "'s from " + itemPrice.name + "@ £" + itemPrice.price
     button(onclick = "goBack()") goBack
 
 

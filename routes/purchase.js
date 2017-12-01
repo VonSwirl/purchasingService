@@ -27,7 +27,7 @@ router.get('/',function(req, res,next){
  * Once submit order has been pressed, the stock required is updated and the order sent to admin and stock services
  */
 router.post('/submitOrder', function(req,res,next){
-  purchaseCompletionService.completePurchase(req.body); 
+    purchaseCompletionService.completePurchase(req.body);
   res.render('orderComplete.pug', {'items' : req.body});
 });
 
