@@ -28,7 +28,7 @@ var standard = {
     'secret': 'jwtsecret'
 }
 
-console.log('i am the state ', process.env.NODE_ENV)
+
 var config = function () {
     switch (process.env.NODE_ENV) {
         case 'development':
