@@ -9,7 +9,7 @@ const request = require('request');
 const orderFulfilUpdater = require('../services/stockRequiredToFulfilOrderUpdater.js');
 const productSearcher = require('../services/productSearchService.js');
 const purchaseCompletionService = require('../services/purchaseCompletionService.js');
-const jwt = require('jsonwebtoken');
+
 
 /**
  * Gets a list of all the product avaliable for purchase with the suppliers that have them in stock
@@ -27,8 +27,14 @@ router.get('/',function(req, res,next){
  * Once submit order has been pressed, the stock required is updated and the order sent to admin and stock services
  */
 router.post('/submitOrder', function(req,res,next){
-    purchaseCompletionService.completePurchase(req.body);
-  res.render('orderComplete.pug', {'items' : req.body});
+    var body = req.body;
+    if(config.tokenChecker.checkIfAuthorisedToPurchase(req)){
+        purchaseCompletionService.completePurchase(body);
+        res.render('orderComplete.pug', {'items' : body});
+    }else{
+        res.send('not authorised');
+    }
+   
 });
 
 

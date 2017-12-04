@@ -5,7 +5,7 @@ var mongoose = require('mongoose');
 var config = require('../config');
 
 
-mongoose.connect(config.testDatabaseURL);
+mongoose.connect(config.databaseURL);
 mongoose.Promise = global.Promise;
 var random = Math.random(1000000);
 

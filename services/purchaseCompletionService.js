@@ -102,26 +102,17 @@ function readyItemForStockUpdate(ean, number){
 
 
 function updateStockWithPurchase(ean, number){
-    console.log('I am making a post in here')
     try{
         readyItemForStockUpdate(ean, number).then(function(item){
-            console.log('item being sent ' , item);
-            console.log(config.stockServiceUpdaterURL);
-            console.log('I am now making a post');
             request({
                 url : config.stockServiceUpdaterURL,
                 method:"POST",
                 body: item,
                 json: true
             }, function(error, res, body){
-                console.log('I am in hereeeeee');
                 if(error){
                     console.log('error with stock service url'. error);
-                }
-                console.log('i am the error ', error);
-                console.log('sent as' , res);
-                console.log('the body ', body);
-       
+                }       
             }).on('error', function(err) {
                 console.log(err)
               })
