@@ -98,12 +98,12 @@ function letOrderServiceKnowProductHasBeenBrought(orderid, ean){
 
     try{
     request.post({
-        url : config.orderServiceURLtoUpdateWithPurchase + orderid,
-        body: {'ean' : ean},
+        url : config.orderServiceURLtoUpdateWithPurchase,
+        body: {'ean' : ean, 'orderRef': orderid},
         json: true
-    }).catch(function(err){
-        console.log('error with letting order service know we have update');
-    });
+    },function(err, res, bod){
+        console.log(err);
+    })
 }catch(err){
     console.log('error with letting order service know we have update');
 }
