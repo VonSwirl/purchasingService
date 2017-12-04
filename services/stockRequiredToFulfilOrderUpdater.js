@@ -97,7 +97,7 @@ function letOrderServiceKnowProductHasBeenBrought(orderid, ean){
     //here we are posting to the order service with the details to make the order 
 
     try{
-    request.post({
+    request.put({
         url : config.orderServiceURLtoUpdateWithPurchase,
         body: {'ean' : ean, 'orderRef': orderid},
         json: true
