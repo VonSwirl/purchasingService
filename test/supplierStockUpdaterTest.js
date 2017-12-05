@@ -8,6 +8,7 @@ var config = require('../config');
 var rewire = require('rewire');
 var addNewProductFunction = require('../services/supplierStockUpdater').addNewProductToDatabase;
 var apiRequestSupplier = require('../services/supplierStockUpdater').apiRequestSupplier;
+var priceUpdater = require('../services/supplierStockUpdater').updatePriceAndStockLevelOfProductIfNeeded;
 var supplierStockUpdater = rewire('../services/supplierStockUpdater');
 var sinon = require('sinon');
 var nock = require('nock')
@@ -16,10 +17,8 @@ require('sinon-mongoose');
 
 var random = Math.random(100000);
 
-var testProduct = {'Description' : "i am a test product", 'Name' : "test" + random, 'Ean' : random, 'BrandName': "boo", 'CategoryName' : "cat" , 'Price' : 10.99, 'InStock' : true };
 describe('MODULE - SUPPLIER UPDATE TESTS', function(done){
   var findStub = sinon.stub(Supplier, "find").resolves(["supplier1", "supplier2"]);
-
   describe('Testing updating DB with Supplier Details', function(done){
       it('Testing the correct number of calls to the supplier update api', function(done){ 
        var fake = function(){return true};
@@ -112,6 +111,18 @@ describe('MODULE - SUPPLIER UPDATE TESTS', function(done){
     });
   })
 
-  
+
+  decribe('Testing updating the price and stock level of an existing product', function(done){
+      var dummyCurSup = {'price' : testProduct.price, 'inStock' : testProduct.inStock};
+      var dummyNewSup = {'price' : 11, 'inStock' : true};
+      var findStub = sinon.stub(ProductSupply, "findByIdAndUpdate").resolves({'price' : 11, 'inStock' :true});
+      it('Stock level being updated', function(done){
+        priceUpdater(dummyCurSup, dummyNewSup).then(function(res,err){
+            expect(res.price).to.be.equal(dummyNewSup.price);
+            expect(res.inStock).to.be.equal(dummyNewSup.inStock);
+        })
+      })
+  })
+
 
 })

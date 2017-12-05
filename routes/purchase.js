@@ -15,11 +15,8 @@ const purchaseCompletionService = require('../services/purchaseCompletionService
  * Gets a list of all the product avaliable for purchase with the suppliers that have them in stock
  */
 router.get('/',function(req, res,next){
-
     productSearcher.getAllProductsAvaliableForPurchase().then(function(product){
         res.render('viewProducts.pug', {productList : product});})
-
-   
 });
 
 

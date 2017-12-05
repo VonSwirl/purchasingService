@@ -1,3 +1,4 @@
+
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 const Supplier = require('../models/suppliers.js');
@@ -83,11 +84,20 @@ function updateProductSupplyList(ean, newProductSupplyList){
  * @param {The supplier side information on the product} infoOnProductInSupplierBank 
  */
 function updatePriceAndStockLevelOfProductIfNeeded(supplierlink, infoOnProductInSupplierBank){
-    if(supplierlink.price != infoOnProductInSupplierBank.Price || supplierlink.inStock != infoOnProductInSupplierBank.InStock){
-        ProductSupply.findByIdAndUpdate({ean : supplierlink.Ean}, {price : supplierlink.Price,
-        inStock : infoOnProductInSupplierBank.InStock}, function(err, res){
-        });
-}
+    return new Promise(function(resolve, rej){
+        if(supplierlink.price != infoOnProductInSupplierBank.Price || supplierlink.inStock != infoOnProductInSupplierBank.InStock){
+            ProductSupply.findByIdAndUpdate({ean : supplierlink.Ean}, {price : supplierlink.Price,
+            inStock : infoOnProductInSupplierBank.InStock}, function(err, res){
+                if(err){
+                    resolve(err);
+                }
+                resolve(res);
+            }).catch(function(err){
+                rej(err);
+            });
+    }
+    })
+  
 }
 
 /**

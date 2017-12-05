@@ -9,6 +9,9 @@ var stockUpdate = require('./services/supplierStockUpdater.js');
 mongoose.connect(config.databaseURL);
 mongoose.Promise = global.Promise;
 
+
+process.env.UV_THREADPOOL_SIZE = 128;
+
 app.use(bodyparse.json());
 app.use(bodyparse.urlencoded({extended: true}));
 

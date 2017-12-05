@@ -30,6 +30,7 @@ var standard = {
 
 
 var config = function () {
+    console.log('in this bit' , process.env.NODE_ENV);
     switch (process.env.NODE_ENV) {
         case 'development':
             return development;
