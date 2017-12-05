@@ -1,7 +1,5 @@
-
 var Product = require('../models/product.js');
 var ProductDTO = require('../dto/productDTO.js');
-
 /**
  * Gets all the products that the suppliers sell ready to be listed
  */
@@ -14,7 +12,6 @@ function getAllProductsAvaliableForPurchase(){
     })
    
 }
-
 /**
  * This function gets the purchased product ready in a format that the stock service will recognise
  * @param {The ean of the product being purchased} ean 

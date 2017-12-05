@@ -35,7 +35,6 @@ rule.hour = 16;
 rule.minute = 40;
 
 var j = schedule.scheduleJob(rule, function(){
-    console.log('in here');
     stockUpdate.updateDbWithAllSupplierStockDetails();
 })
 

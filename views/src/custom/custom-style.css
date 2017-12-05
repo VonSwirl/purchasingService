@@ -20,21 +20,16 @@ body {
 table{
     border-collapse: collapse;
 }
-<<<<<<< HEAD
 
 .firstLine td{
     border-bottom: 2px solid black;
 }
 
 .clickable {
+    background-color: red;
     border: solid black;
     border-width: 0 3px 3px 0;
     display: inline-block;
     padding: 3px;
 }
 
-=======
-.firstLine td{
-    border-bottom: 2px solid black;
-}
->>>>>>> a42a3551371004f902e01cf2971c9bffbdb0bba8

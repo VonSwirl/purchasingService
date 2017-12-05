@@ -1,0 +1,29 @@
+{
+	"config": {
+		"target": "http://localhost:3001/purchasing",
+		"phases": [{
+			"duration": 60,
+			"arrivalRate": 5
+		}]
+	},
+
+	"scenarios": [{
+		"flow": [{
+			"get": {
+				"url": "/"
+			},
+			"post": {
+				"url": "/submitOrder",
+				"json": {
+					"5 102310 200413": ["non-conductive Screen Protector", 2, {
+						"name": "unndercutters",
+						"price": 9.35
+					}]
+
+				}
+			}
+
+		}]
+
+	}]
+}
