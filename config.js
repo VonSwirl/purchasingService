@@ -36,7 +36,7 @@ var config = function () {
         case 'standard':
             return standard;
         default:
-            return development;
+            return standard;
     }
 }
 
