@@ -1,9 +1,45 @@
-var config = {}
+var standardTokenHandler = require('./utility/tokenHandler.js')
 
-config.databaseURL = 'mongodb://pserv:pserv1@ds241055.mlab.com:41055/purchase-service';
-config.orderServiceURLtoUpdateWithPurchase = "https://localhost:3004/order/PurchasingUpdate"; //"http://localhost:3004/PurchasingUpdate";
-config.testDatabaseURL = "mongodb://pserv:pserv1@ds121726.mlab.com:21726/test-purchase-service";
-config.AdminServicePurchaseURL = "https://peaceful-caverns-91545.herokuapp.com/purchasing/test";
-config.stockServiceUpdaterURL= "https://peaceful-caverns-91545.herokuapp.com/purchasing/test";
-config.secret = 'jwtsecret'
-module.exports = config;
+var development = {
+    'tokenChecker' : standardTokenHandler,
+    'databaseURL': 'mongodb://pserv:pserv1@ds241055.mlab.com:41055/purchase-service',
+    'orderServiceURLtoUpdateWithPurchase': "http://3amigoso.azurewebsites.net/order/PurchasingUpdate/", //"http://localhost:3004/PurchasingUpdate";
+    'AdminServicePurchaseURL': "https://peaceful-caverns-91545.herokuapp.com/purchasing/test",
+    'stockServiceUpdaterURL': "http://3amigoss.azurewebsites.net/api/newproducts",
+    'secret': 'jwtsecret'
+}
+
+
+var test = {
+    'tokenChecker' : {'checkIfAuthorisedToPurchase' : function(res){return true} , 'pullToken' : true},
+    'databaseURL': "mongodb://pserv:pserv1@ds121726.mlab.com:21726/test-purchase-service",
+    'orderServiceURLtoUpdateWithPurchase': "http://3amigoso.azurewebsites.net/order/PurchasingUpdate/", //"http://localhost:3004/PurchasingUpdate";
+    'AdminServicePurchaseURL': "https://peaceful-caverns-91545.herokuapp.com/purchasing/test",
+    'stockServiceUpdaterURL': "http://3amigoss.azurewebsites.net/api/newproducts",
+    'secret': 'jwtsecret'
+}
+
+var standard = {
+    'tokenChecker' : {'checkIfAuthorisedToPurchase' : function(res){return true} , 'pullToken' : true},
+    'databaseURL': 'mongodb://pserv:pserv1@ds241055.mlab.com:41055/purchase-service',
+    'orderServiceURLtoUpdateWithPurchase': "http://3amigoso.azurewebsites.net/order/PurchasingUpdate/", //"http://localhost:3004/PurchasingUpdate";
+    'AdminServicePurchaseURL': "https://peaceful-caverns-91545.herokuapp.com/purchasing/test",
+    'stockServiceUpdaterURL': "http://3amigoss.azurewebsites.net/api/newproducts",
+    'secret': 'jwtsecret'
+}
+
+console.log('i am the state ', process.env.NODE_ENV)
+var config = function () {
+    switch (process.env.NODE_ENV) {
+        case 'development':
+            return development;
+        case 'standard':
+            return standard;
+        default:
+            return development;
+    }
+}
+
+
+module.exports = config();
+

@@ -59,6 +59,10 @@ function updateAdminWithPurchase(supplierItemPurchases){
                    url : config.AdminServicePurchaseURL,
                    body: supplierItemPurchases[key].jsonVersionForPayment,
                    json: true
+               }, function(error, response, body){
+                   if(error){
+                       console.log(error);
+                   }
                });} catch(err){
                    console.log('error with admin service link');
                }
@@ -98,15 +102,24 @@ function readyItemForStockUpdate(ean, number){
 
 
 function updateStockWithPurchase(ean, number){
-    readyItemForStockUpdate(ean, number).then(function(item){
-        request.post({
-            url : config.stockServiceUpdaterURL,
-            body: item,
-            json: true
-        });
-   
-
-})}
+    try{
+        readyItemForStockUpdate(ean, number).then(function(item){
+            request({
+                url : config.stockServiceUpdaterURL,
+                method:"POST",
+                body: item,
+                json: true
+            }, function(error, res, body){
+                if(error){
+                    console.log('error with stock service url'. error);
+                }       
+            }).on('error', function(err) {
+                console.log(err)
+              })
+    })}catch(err){
+        console.log('error with stock service URL');
+    }
+}
 
 
 module.exports = {completePurchase};
