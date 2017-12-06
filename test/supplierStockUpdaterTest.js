@@ -16,6 +16,7 @@ require('sinon-mongoose');
 
 
 var random = Math.random(100000);
+var testProduct = {'Description' : "i am a test product", 'Name' : "test" + random, 'Ean' : random, 'BrandName': "boo", 'CategoryName' : "cat" , 'Price' : 10.99, 'InStock' : true };
 
 describe('MODULE - SUPPLIER UPDATE TESTS', function(done){
   var findStub = sinon.stub(Supplier, "find").resolves(["supplier1", "supplier2"]);
@@ -50,7 +51,6 @@ describe('MODULE - SUPPLIER UPDATE TESTS', function(done){
     it('Testing incorrect url', function(done){
         var spy = sinon.spy(supplierStockUpdater, "updateProductsDbBySupplier");
         supplierStockUpdater.makeAnApiRequestToSupplierAndUpdate({"api": "wrong", "name": "wronger", "type" : "api"}).then(function(res){
-            console.log('coming in here as EXPECTED')
             expect(spy.callCount).to.be.equal(0);
             spy.restore();
             done();
@@ -66,7 +66,6 @@ describe('MODULE - SUPPLIER UPDATE TESTS', function(done){
         var stub = sinon.stub(supplierStockUpdater, "updateProductsDbBySupplier").callsFake(fake);
         var promise = supplierStockUpdater.makeAnApiRequestToSupplierAndUpdate({"api" : "http://www.testing.com", "name": "bla" , "type" : "api"})
         promise.then(function(res){
-           console.log('i made it IN') 
            expect(stub.callCount).to.be.equal(1);
             stub.restore();
             done();
@@ -111,7 +110,7 @@ describe('MODULE - SUPPLIER UPDATE TESTS', function(done){
     });
   })
 
-
+/* 
   decribe('Testing updating the price and stock level of an existing product', function(done){
       var dummyCurSup = {'price' : testProduct.price, 'inStock' : testProduct.inStock};
       var dummyNewSup = {'price' : 11, 'inStock' : true};
@@ -123,6 +122,6 @@ describe('MODULE - SUPPLIER UPDATE TESTS', function(done){
         })
       })
   })
-
+ */
 
 })

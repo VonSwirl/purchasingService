@@ -1,0 +1,48 @@
+
+> purchasing-service@1.0.0 test /home/chris/Dropbox/SoftwareArch/PurchasingService
+> mocha || true
+
+in this bit test
+
+
+  MODULE - DATABASE CONNECTIONS
+     Testing products schema
+      ✓ Testing a product correctly being saved to the products database (436ms)
+      ✓ Testing that the saved object can be pulled back out of the database (40ms)
+    Testing products supply schema
+      ✓ Testing a product supply correctly being saved to the product supply database
+      ✓ Testing that the saved object can be pulled back out of the database (41ms)
+
+  MODULE - PRODUCT SEARCH SERVICE
+    Ready item for stock service test
+      ✓ check that correct product details are being passed to stock service (73ms)
+      ✓ testing a non existent product trying to be readied
+      ✓ testing a non number being passed in
+      ✓ testing a number equal to zero being passed in
+
+  MODULE - STOCK REQUIRED AFTER ORDER SERVICE
+    Testing update stock required after order function
+      ✓ Testing removing the less than needed after a purchase (163ms)
+      ✓ Testing removing all the stock needed for an order of a product (154ms)
+null
+      ✓ Testing no stock is removed when there are no outstanding stock demands (109ms)
+    Testing add stock required to product function
+      ✓ Error returned if no product exists (42ms)
+      ✓ Adding a new stock order requirement that does not already exist (144ms)
+      ✓ Adding a new stock order requirement that already has outstanding orders (150ms)
+      ✓ Adding a new stock order requirement that already has outstanding orders with the same order number (139ms)
+
+  MODULE - SUPPLIER UPDATE TESTS
+    Testing updating DB with Supplier Details
+      ✓ Testing the correct number of calls to the supplier update api
+      ✓ Testing a non-existent supplier throws error
+    Testing making an api request to supplier
+      ✓ Testing incorrect url
+      ✓ Testing a good call back from api
+      ✓ Testing a bad call back from api
+    Tesing adding a new product to a database
+      ✓ adding a correctly formatted product (105ms)
+
+
+  21 passing (2s)
+
