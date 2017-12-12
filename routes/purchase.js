@@ -1,6 +1,3 @@
-
-//import { config } from 'chai/lib/chai';
-
 var express = require('express');
 var config = require('../config');
 var router = express.Router();
@@ -50,7 +47,6 @@ router.get('/updateSupplierStockDetails', function(req,res,next){
  */
 router.post('/stockRequired', function(req,res,next){
     var items = req.body["itemsRequired"];
-    console.log('posting', items);
     for(var item in items){
         orderFulfilUpdater.addStockRequiredToProduct(req.body["orderid"], items[item]["ean"], items[item]["number"]);
     }

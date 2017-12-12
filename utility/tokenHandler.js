@@ -17,7 +17,6 @@ function pullToken(req){
 
 //This method checks if the user is able to make a purchase 
 function checkIfAuthorisedToPurchase(req){
-    console.log('i am here RRRRRRRRRRRRRR');
     var decodedToken = pullToken(req);
     if(decodedToken){
         if(decodedToken.canPurchase){
