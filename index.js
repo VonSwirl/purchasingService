@@ -16,6 +16,7 @@ var connectWithRetry = function() {
   };
 
 
+connectWithRetry();
 mongoose.Promise = global.Promise;
 
 
